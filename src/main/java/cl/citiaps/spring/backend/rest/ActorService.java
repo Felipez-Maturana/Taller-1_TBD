@@ -38,5 +38,12 @@ public class ActorService {
 	public Actor create(@RequestBody Actor resource) {
 	     return actorRepository.save(resource);
 	}
+	
+	@RequestMapping(value = "/{id}/films", method = RequestMethod.GET)
+	@ResponseBody
+	public  Actor findTwo(@PathVariable("id") Integer id) {
+		return actorRepository.findOne(id);
+	}
+	
 	 
 }

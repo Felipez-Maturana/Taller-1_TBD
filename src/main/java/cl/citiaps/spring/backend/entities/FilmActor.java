@@ -7,61 +7,45 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 
-/**
- * The persistent class for the film_actor database table.
- * 
- */
 @Entity
-@Table(name="film_actor")
-@NamedQuery(name="FilmActor.findAll", query="SELECT a FROM FilmActor a")
-public class FilmActor implements Serializable {
-	private static final long serialVersionUID = 1L;
+@Table(name = "film_actor")
+@AssociationOverrides({
+	@AssociationOverride(name = "pk.actor",
+		joinColumns = @JoinColumn(name = "ACTOR_ID")),
+	@AssociationOverride(name = "pk.film",
+		joinColumns = @JoinColumn(name = "FILM_ID")) })
 
-	@Id
-	@Column(name="film_actor_id", unique=true, nullable=false)
-	private int film_actorId;
-	
-	@Column(name="actor_id", nullable=false)
-	private int actorId;
+public class FilmActor implements java.io.Serializable {
 
-	@Column(name="film_id", nullable=false)
-	private int filmId;
-
-	@Column(name="last_update", nullable=false)
-	private Timestamp lastUpdate;
+	private FilmActorId pk = new FilmActorId();
 	
 	public FilmActor() {
 	}
 	
-	public int getFilmActorId() {
-		return this.film_actorId;
+	@EmbeddedId
+	public FilmActorId getPk() {
+		return pk;
 	}
 
-	public void getFilmActorId(int film_actorId) {
-		this.film_actorId = film_actorId;
+	public void setPk(FilmActorId pk) {
+		this.pk = pk;
 	}
 	
-	public int getFilmId() {
-		return this.filmId;
+	@Transient
+	public Actor getActor() {
+		return getPk().getActor();
 	}
 
-	public void getFilmId(int filmId) {
-		this.filmId = filmId;
+	public void setActor(Actor actor) {
+		getPk().setActor(actor);
 	}
 	
-	public int getActorId() {
-		return this.actorId;
+	@Transient
+	public Film getFilm() {
+		return getPk().getFilm();
 	}
 
-	public void setActorId(int actorId) {
-		this.actorId = actorId;
-	}
-
-	public Timestamp getLastUpdate() {
-		return this.lastUpdate;
-	}
-
-	public void setLastUpdate(Timestamp lastUpdate) {
-		this.lastUpdate = lastUpdate;
+	public void setFilm(Film film) {
+		getPk().setFilm(film);
 	}
 }
