@@ -1,9 +1,14 @@
 package cl.citiaps.spring.backend.entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.sql.Timestamp;
 
+import javax.persistence.*;
+
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The persistent class for the actor database table.
@@ -27,10 +32,16 @@ public class Actor implements Serializable {
 
 	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
+	
+	
+	@ManyToMany
+	@JoinTable(name = "film_actor", joinColumns={@JoinColumn(name="actor_id")},inverseJoinColumns={@JoinColumn(name="film_id")})
+    private List<Film> films = new ArrayList<Film>();
 
 	public Actor() {
 	}
 
+	
 	public int getActorId() {
 		return this.actorId;
 	}
@@ -62,5 +73,21 @@ public class Actor implements Serializable {
 	public void setLastUpdate(Timestamp lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+	@JsonIgnore
+	public List<Film> getFilms()
+	{
+		return films;
+	}
+	
+//	public List<Film> getFilms() {
+//        return this.films;
+//    }
+	
+//	@Override
+//    public String toString() {
+//        return "Actor [id=" + actorId + ", firstname=" + firstName +"]";
+//    }
 
+	
+	
 }
